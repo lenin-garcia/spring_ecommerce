@@ -1,15 +1,29 @@
 
 package com.curso.ecommerce.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name ="productos")
 public class Producto {
     
+    @Id
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Integer id;
+    
     private String nombre;
     private String descripcion;
     private String imagen;
     private double precio;
     private int cantidad;
+    
+    @ManyToOne
+    private Usuario usuario;// muchos prodcutos seran subido por un usuario, atributo usuario sera la relacion del prodcuto con la clase usuario en el listado de prodcutos
 
     public Producto() {
     }
@@ -75,6 +89,14 @@ public class Producto {
     @Override
     public String toString() {
         return "Producto{" + "id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", imagen=" + imagen + ", precio=" + precio + ", cantidad=" + cantidad + '}';
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
     
     
