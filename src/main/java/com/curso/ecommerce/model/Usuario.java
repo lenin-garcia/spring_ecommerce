@@ -36,7 +36,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(Integer id, String nombre, String userName, String email, String direccion, String telefono, String tipo, String password, List<Producto> listadoProductos) {
+    public Usuario(Integer id, String nombre, String userName, String email, String direccion, String telefono, String tipo, String password) {
         this.id = id;
         this.nombre = nombre;
         this.userName = userName;
@@ -45,7 +45,7 @@ public class Usuario {
         this.telefono = telefono;
         this.tipo = tipo;
         this.password = password;
-        this.listadoProductos = listadoProductos;
+
     }
 
   
