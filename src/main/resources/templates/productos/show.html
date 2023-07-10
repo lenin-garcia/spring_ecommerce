@@ -2,32 +2,24 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
     <head>
-
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-
         <title>Spring eCommerce</title>
-
         <!-- Bootstrap core CSS el formato con el que thymeleaf reconoce los recursos es th:hre= "@{recurso...}" -->
         <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-
         <!-- Custom styles for this template -->
         <link th:href="@{/css/heroic-features.css}" rel="stylesheet">
-
     </head>
 
     <body>
-
         <!-- Navigation -->
         <!-- incluimos el Navigation o header -->
         <div th:include="administrador/template_admin.html::header" ></div>
 
         <!-- Page Content -->
         <div class="container">
-
-
             <!-- Page Heading/Breadcrumbs -->
             <h1 class="mt-4 mb-3">
                 Spring eCommerce <small>Productos</small>
@@ -52,11 +44,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td ></td>
-                        <td ></td>
-                        <td ></td>
-                        <td ></td>
+                    <!--
+                    th:each nos permite recorrer una lista (en este caso la lista viene del controlador)
+                    prod = sera el nombre de la variable que almacenara cada iteracion de esa lista
+                    ${productos}= es la variable que trae el listado del controlador
+                    th:text se usa para mostrar informacion
+                    -->
+                    <tr th:each = "prod:${productos}">
+                        <td th:text ="${prod.nombre}" ></td>
+                        <td th:text ="${prod.descripcion}" ></td>
+                        <td th:text ="${prod.cantidad}" ></td>
+                        <td th:text ="${prod.precio}" ></td>
                         <td><a  class="btn btn-warning" href="">Editar</a> </td>
                         <td><a  class="btn btn-danger" href="">Eliminar</a> </td>
                     </tr>       

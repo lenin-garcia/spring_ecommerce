@@ -2,12 +2,14 @@
 package com.curso.ecommerce.controller;
 
 
+
 import com.curso.ecommerce.model.Producto;
 import com.curso.ecommerce.model.Usuario;
 import com.curso.ecommerce.services.ProductoService;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +26,13 @@ public class ProductoController {
     private ProductoService productoService;
     
     
-   
+   /*Model lleva informacioncion del backend  hacia la vista
+    *
+    */
+    //muestra todos los productos listados
     @GetMapping("")
-    public String show(){
+    public String show(Model model){
+        model.addAttribute("productos", productoService.finAll());//Al agregar el atributo "productos" al modelo del controlador, se está pasando esa lista de productos a la vista correspondiente
         return "productos/show";
     }
     
