@@ -39,8 +39,8 @@
                         <th scope="col">Descripción</th>
                         <th scope="col">Inventario</th>
                         <th scope="col">Precio</th>
-                        <th scope="col">Acción</th>
-                        <th scope="col">Acción</th>
+                        <th scope="col">Acción</th><!--Accion editar-->
+                        <th scope="col">Acción</th><!--Accion eliminar-->
                     </tr>
                 </thead>
                 <tbody>
@@ -55,7 +55,7 @@
                         <td th:text ="${prod.descripcion}" ></td>
                         <td th:text ="${prod.cantidad}" ></td>
                         <td th:text ="${prod.precio}" ></td>
-                        <td><a  class="btn btn-warning" href="">Editar</a> </td>
+                        <td><a  class="btn btn-warning" th:href="@{/productos/edit/{id}(id=${prod.id})}">Editar</a> </td>
                         <td><a  class="btn btn-danger" href="">Eliminar</a> </td>
                     </tr>       
                 </tbody>

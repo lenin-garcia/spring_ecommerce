@@ -6,11 +6,13 @@ package com.curso.ecommerce.controller;
 import com.curso.ecommerce.model.Producto;
 import com.curso.ecommerce.model.Usuario;
 import com.curso.ecommerce.services.ProductoService;
+import java.util.Optional;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -59,8 +61,31 @@ public class ProductoController {
         return "redirect:/productos";
     }
  
+    /*PathVariable mapea la url para obtener la vaiable
+    *
+    */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Integer id, Model model){
+    //almacenamos el objeto buscado por el id
+        Producto producto = new Producto();
+    //Creamos una variable de tipo Optional porque puede que el prodcuto este o no
+        Optional<Producto> optionalProducto = productoService.get(id);
+        producto = optionalProducto.get();
+        LOGGER.info("Este es el prodcuto que vamos a editar{}",producto);
     
+    //al objeto model se le agrega el atributo que contendra el producto encontrado por el id
+        model.addAttribute("producto", producto);
+        return "productos/edit";
+    }
     
+
+    
+    //metodo que va a actualizar el producto
+    @PostMapping("/update")
+    public String update(Producto producto){
+        productoService.update(producto);
+        return "redirect:/productos";
+    }
     
     
 }
