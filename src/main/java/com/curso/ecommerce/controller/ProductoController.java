@@ -6,6 +6,8 @@ package com.curso.ecommerce.controller;
 import com.curso.ecommerce.model.Producto;
 import com.curso.ecommerce.model.Usuario;
 import com.curso.ecommerce.services.ProductoService;
+import com.curso.ecommerce.services.UploadFileService;
+import java.io.IOException;
 import java.util.Optional;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/productos")
@@ -23,6 +27,10 @@ public class ProductoController {
     
     //creamos para controlar lo que va haceindo la app
     private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
+    
+    //Inyectamos el servicio que hemos creado para cargar y eliminar imagenes
+    @Autowired
+    private UploadFileService upload;
     
     //variable para acceder a los metodos que interactuan con la bbdd
     @Autowired
@@ -52,12 +60,37 @@ public class ProductoController {
     * LOGGER.info("Este el el objeto producto{}", producto); si no se le colocan las llaves, no muestra la informacion del producto
     * para mostrar la informacion del producto este debe tener el metodo toString
     *el prodcuto debe estar asociado a un usuario
+    *@RequestParam("img") MultipartFile file indicamos que estamos recibiendo por parametro una archivo
+    *img nos idica que vendra del formulario en el campo con nombre img, lo almacenara en la variable file
     */
    @PostMapping("/save")
-    public String save( Producto producto){
+    public String save( Producto producto, @RequestParam("img") MultipartFile file) throws IOException{
         LOGGER.info("Este el el objeto producto{}", producto);
         Usuario user = new Usuario(1, "", "", "", "", "", "", "");
         producto.setUsuario(user);
+        
+        //*****carga de imagen********
+        //entrara en el if cuando la imagen sea cargada por primera vez
+        if (producto.getId()== null) {// cuando se crea un producto por primera vez siempre su id va a ser null
+           String nombreImagen = upload.saveImage(file);
+           producto.setImagen(nombreImagen);
+       }else{
+            
+            //cuando se modifique un producto pero se cargue la misma imagen
+            if(file.isEmpty()){ //editamos el prodcuto pero mantenemos la misma imagen
+                Producto p = new Producto();
+                p= productoService.get(producto.getId()).get();//obtenemos la imagen que tenia antes
+                producto.setImagen(p.getImagen());// y pasamos esa imagen nuevamente
+            }
+            else{
+                //cuando actualizamos y cambiamos la imagen
+                String nombreImagen = upload.saveImage(file);
+                producto.setImagen(nombreImagen);
+            }
+        
+        }
+        
+        
         productoService.save(producto);
         return "redirect:/productos";
     }
@@ -93,4 +126,9 @@ public class ProductoController {
         productoService.delete(id);
         return "redirect:/productos" ;
     }
+    
+    
+    
+    
+    
 }
