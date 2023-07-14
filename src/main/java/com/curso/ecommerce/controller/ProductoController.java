@@ -114,7 +114,7 @@ public class ProductoController {
             String nombreImagen = upload.saveImage(file);
             producto.setImagen(nombreImagen);
         }
-        producto.setUsuario(p.getUsuario());
+        producto.setUsuario(p.getUsuario());//obtendriamos el usuario que hizo la modificacion
         productoService.update(producto);
         return "redirect:/productos";
     }
