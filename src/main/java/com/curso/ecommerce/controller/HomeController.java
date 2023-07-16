@@ -1,8 +1,11 @@
 package com.curso.ecommerce.controller;
 
+import com.curso.ecommerce.model.DetalleOrden;
+import com.curso.ecommerce.model.Orden;
 import com.curso.ecommerce.model.Producto;
 import com.curso.ecommerce.repository.ProductoRepository;
 import com.curso.ecommerce.services.ProductoService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -23,6 +27,14 @@ public class HomeController {
     private ProductoService productoService;
     
     private Logger log = LoggerFactory.getLogger(HomeController.class);
+    
+    //listado que contendra todos los detalles
+    private List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
+   
+    //almacenara la orden
+    private Orden orden = new Orden();
+    
+    
 
     //enviara los prodcutos a la vista desde la bbdd con el objeto Model
     @GetMapping("")
@@ -41,6 +53,12 @@ public class HomeController {
         producto = produtoOptional.get(); //obtenemos realmente el producto
         model.addAttribute("producto", producto); //enviamos el prodcto a la vista
         return "usuario/productohome";
+    }
+    
+    //redireccionara a la vista del carrito de compra
+    @PostMapping("/cart")
+    public String addCart(){
+        return "usuario/carrito";
     }
 
 }
