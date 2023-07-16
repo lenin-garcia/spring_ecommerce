@@ -4,6 +4,7 @@ import com.curso.ecommerce.model.Producto;
 import com.curso.ecommerce.repository.ProductoRepository;
 import com.curso.ecommerce.services.ProductoService;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,12 @@ public class HomeController {
     
     //nos llevara del producto hasta la vista del detalle del producto
     @GetMapping("/productohome/{id}")
-    public String productoHome (@PathVariable Integer id ){
+    public String productoHome (@PathVariable Integer id ,Model model ){
         log.info("Id enviado para mostrar detalle de producto{}",id);
+        Producto producto = new Producto();
+        Optional<Producto> produtoOptional = productoService.get(id);
+        producto = produtoOptional.get(); //obtenemos realmente el producto
+        model.addAttribute("producto", producto); //enviamos el prodcto a la vista
         return "usuario/productohome";
     }
 
