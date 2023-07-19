@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/")
@@ -56,8 +57,35 @@ public class HomeController {
     }
     
     //redireccionara a la vista del carrito de compra
+    //para agregar el prodctuo al carrito necesitamos la cantidad y el id
     @PostMapping("/cart")
-    public String addCart(){
+    public String addCart(@RequestParam Integer id , @RequestParam Integer cantidad,  Model model){
+        DetalleOrden detalleOrden = new DetalleOrden();
+        Producto producto = new Producto(); // almacenara el producto
+        double sumaTotal = 0.0; // almacenara el total de los prodcutos
+        
+        Optional<Producto> optionalProducto = productoService.get(id);
+        log.info("El prodcuto añadido es: {}",optionalProducto.get());
+        log.info("Cantidad: {}",cantidad);
+        
+        //obtenemos informacion del producto
+        producto = optionalProducto.get();//obtenemos el producto
+        detalleOrden.setCantidad(cantidad);//seteamos la cantidad que entra como parametro
+        detalleOrden.setNombre(producto.getNombre());
+        detalleOrden.setPrecio(producto.getPrecio());
+        detalleOrden.setTotal(producto.getPrecio()* cantidad );
+        detalleOrden.setProducto(producto);//guarda el id del producto
+        
+        //agregamos detallles a la lista
+        detalles.add(detalleOrden);
+        
+        //sumamos el total del carrito
+        sumaTotal= detalles.stream().mapToDouble(dt->dt.getTotal()).sum();//sumara todos los totales que esten en esa lista
+        
+        //pasamos las variable a la vista para mostrarlas
+        orden.setTotal(sumaTotal);
+        model.addAttribute("cart", detalles);
+        model.addAttribute("orden", orden);
         return "usuario/carrito";
     }
 
