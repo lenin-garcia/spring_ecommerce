@@ -8,9 +8,9 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <!-- Bootstrap core CSS el formato con el que thymeleaf reconoce los recursos es th:hre= "@{recurso...}" -->
-        <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
         <!-- Custom styles for this template -->
-        <link th:href="@{css/heroic-features.css}" rel="stylesheet">
+        <link th:href="@{/css/heroic-features.css}" rel="stylesheet">
         <title>Spring eCommerce</title>
     </head>
 
@@ -55,7 +55,7 @@
                   <td th:text ="${dorden.precio}" ></td>
                   <td th:text ="${dorden.cantidad}"></td>
                   <td th:text ="${dorden.total}" ></td>
-                  <td><a href="#" class="btn btn-danger">Quitar</a></td>
+                  <td><a th:href="@{/delete/cart/{id} (id = ${dorden.producto.id})}" class="btn btn-danger">Quitar</a></td>
                 </tr>
               </tbody>
             </table>
