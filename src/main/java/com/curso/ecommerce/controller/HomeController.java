@@ -3,7 +3,9 @@ package com.curso.ecommerce.controller;
 import com.curso.ecommerce.model.DetalleOrden;
 import com.curso.ecommerce.model.Orden;
 import com.curso.ecommerce.model.Producto;
+import com.curso.ecommerce.model.Usuario;
 import com.curso.ecommerce.repository.ProductoRepository;
+import com.curso.ecommerce.services.IUsuarioService;
 import com.curso.ecommerce.services.ProductoService;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,10 @@ public class HomeController {
 
     //almacenara la orden
     private Orden orden = new Orden();
+    
+    //obtenemos el usuario
+    @Autowired
+    private IUsuarioService usuarioService; 
 
     //enviara los prodcutos a la vista desde la bbdd con el objeto Model
     @GetMapping("")
@@ -127,7 +133,15 @@ public class HomeController {
     
     //metodo que muestra detalles de la orden
     @GetMapping("/order")
-    public String order(){
+    public String order(Model model){
+        
+        //traemos la usuario
+        Usuario usuario = usuarioService.finByID(1).get();
+        
+        model.addAttribute("cart", detalles);
+        model.addAttribute("orden", orden);
+        model.addAttribute("usuario", usuario);
+        
         return "usuario/resumenorden"; 
     }
     
